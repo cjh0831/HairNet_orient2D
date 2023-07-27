@@ -77,7 +77,7 @@ public:
             OpenMesh::IO::Options read_opt = OpenMesh::IO::Options::VertexNormal;
 
             //if( !OpenMesh::IO::read_mesh(mesh, "/home/yi/Documents/Hair/real_hair_data/torsoHair.obj", read_opt))
-            if( !OpenMesh::IO::read_mesh(body_mesh, "../../model/female_halfbody_medium_in_realimage_coordinate.obj", read_opt))
+            if( !OpenMesh::IO::read_mesh(body_mesh, "model/female_halfbody_medium_in_realimage_coordinate.obj", read_opt))
 
             {
                 cout<<"read body mesh error\n";

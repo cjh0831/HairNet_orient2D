@@ -179,7 +179,7 @@ void visualize_and_save_body_image(string exMat_folder,  string out_body_img_fol
 void save_orient_with_body_image(string orient_image_fn, string body_image_fn, string seg_image_fn, string out_orient_with_body_image_fn)
 {
     cv::Mat orient_img=cv::imread(orient_image_fn, cv::IMREAD_UNCHANGED);
-    cv::Mat body_img = cv::imread(body_image_fn, cv::IMREAD_GRAYSCALE);
+    // cv::Mat body_img = cv::imread(body_image_fn, cv::IMREAD_GRAYSCALE);
     cv::Mat seg_img = cv::imread(seg_image_fn, cv::IMREAD_GRAYSCALE);
     cv::Mat orient_with_body_png(orient_img.rows, orient_img.cols, CV_8UC3);
     cv::Mat orient_with_body_exr(orient_img.rows, orient_img.cols, CV_32FC3);
@@ -187,21 +187,20 @@ void save_orient_with_body_image(string orient_image_fn, string body_image_fn, s
     for (int i=0;i<orient_img.cols;i++)
         for (int j=0;j<orient_img.rows;j++)
         {
-            int is_body= body_img.at<uchar>(i,j);
+            // int is_body= body_img.at<uchar>(i,j);
             int is_hair = seg_img.at<uchar>(i,j);
-            orient_with_body_exr.at<cv::Vec3f>(i,j)[0]=orient_img.at<cv::Vec3f>(i,j)[0];
-            orient_with_body_exr.at<cv::Vec3f>(i,j)[1]=orient_img.at<cv::Vec3f>(i,j)[1];
-            orient_with_body_exr.at<cv::Vec3f>(i,j)[2]=1.0;
 
             if(is_hair>122)
             {
+                orient_with_body_exr.at<cv::Vec3f>(i,j)[0]=orient_img.at<cv::Vec3f>(i,j)[0];
+                orient_with_body_exr.at<cv::Vec3f>(i,j)[1]=orient_img.at<cv::Vec3f>(i,j)[1];
                 orient_with_body_exr.at<cv::Vec3f>(i,j)[2]=1.0;
             }
-            if( (is_body>122) && (is_hair<122))
-            {
-                orient_with_body_exr.at<cv::Vec3f>(i,j)=cv::Vec3f(0,0,0.5);
-            }
-            if( (is_body<122) && (is_hair<122))
+            // if( (is_body>122) && (is_hair<122))
+            // {
+            //     orient_with_body_exr.at<cv::Vec3f>(i,j)=cv::Vec3f(0,0,0.5);
+            // }
+            else
                 orient_with_body_exr.at<cv::Vec3f>(i,j)=cv::Vec3f(0,0,0);
 
         }
@@ -521,7 +520,7 @@ void save_body_transformation_in_sim_coordinate(string exMat_folder, string real
 int main(int argc, char**argv) {
 
     if (argc < 3) {
-        cout<<"Need three argv. bool has_body_imgs; string hair_folder;";
+        cout<<"Need three argv. bool has_body_imgs; string hair_folder;"<<endl;
         return 1;
     }
     bool has_body_imgs = false;
@@ -552,7 +551,7 @@ int main(int argc, char**argv) {
         mkdir(out_body_img_folder.data(),S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
         visualize_and_save_body_image(exMat_folder, out_body_img_folder);
         save_body_transformation_in_sim_coordinate(exMat_folder,
-                                                   "../../model/real2synthetic_head_transformation.txt",
+                                                   "model/real2synthetic_head_transformation.txt",
                                                    out_orient_img_with_body_256_folder);
     }
 

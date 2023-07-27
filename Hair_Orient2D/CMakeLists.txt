@@ -16,34 +16,31 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
 
-find_package(OpenMP)
-if (OPENMP_FOUND)
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-endif()
+INCLUDE(FindOpenMesh.cmake)
+
+find_package(OpenMesh REQUIRED)
 
 FIND_PACKAGE(JPEG REQUIRED)
 FIND_PACKAGE(PNG  REQUIRED)
-#FIND_PACKAGE(FFTW REQUIRED)
 
+set(GLFW3_LIBRARY /usr/lib/x86_64-linux-gnu/libglfw.so)
 
 INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR}
                     ${PNG_INCLUDE_DIR}
         ${GLFW3_INCLUDE_PATH}
         ${GLEW_INCLUDE_PATH}
         ${GLM_INCLUDE_PATH}
-        /home/yi/OpenMesh-6.3/src
+	${OPENMESH_INCLUDE_DIR}
         #${FFTW3F_INCLUDE_DIR}
         )
 
-add_executable(Orient2D ${SOURCE_FILES} )
+add_executable(Orient2D ${SOURCE_FILES})
 
 target_link_libraries(Orient2D
         ${OPENGL_LIBRARY} # filled by "find_package(OpenGL REQUIRED)"
+        ${GLEW_LIBRARIES}
         ${GLFW3_LIBRARY}
-        ${GLEW_LIBRARY}
-        /home/yi/OpenMesh-6.3/build/Build/lib/libOpenMeshCore.so
-        /home/yi/OpenMesh-6.3/build/Build/lib/libOpenMeshTools.so
+	${OPENMESH_LIBRARIES}
 
         ${OpenCV_LIBS}
         ${JPEG_LIBRARIES}
